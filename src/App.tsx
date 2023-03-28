@@ -1,16 +1,19 @@
-import React from 'react';
+import React, { useReducer } from 'react';
 import './App.css';
-import { UserContext, userContextDefaultValue } from './userContext';
+import { reducer, userContextValue, UserDispatchContext, UserStateContext } from './userContext';
 import { UsernameAndTokenForm } from './UsernameAndTokenForm';
 import { PrintInfo } from './PrintInfo';
 
 function App() {
-  return (
-      <UserContext.Provider value={userContextDefaultValue}>
-        <UsernameAndTokenForm />
-        <PrintInfo />
-      </UserContext.Provider>
-  );
+    const [state, dispatch] = useReducer(reducer, userContextValue);
+    return (
+        <UserDispatchContext.Provider value={dispatch}>
+            <UserStateContext.Provider value={state}>
+                <UsernameAndTokenForm/>
+                <PrintInfo/>
+            </UserStateContext.Provider>
+        </UserDispatchContext.Provider>
+    );
 }
 
 export default App;

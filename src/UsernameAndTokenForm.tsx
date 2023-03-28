@@ -1,22 +1,24 @@
-import React from 'react';
-import { UserContext } from './userContext';
+import React, { useCallback, useContext, useRef } from 'react';
+import { UserDispatchContext } from './userContext';
+
 interface Props {
 
 }
 
 export const UsernameAndTokenForm: React.FC<Props> = props => {
-    const usernameRef = React.useRef<HTMLInputElement>(null);
-    const tokenRef = React.useRef<HTMLInputElement>(null);
-    const userData = React.useContext(UserContext);
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const usernameRef = useRef<HTMLInputElement>(null);
+    const tokenRef = useRef<HTMLInputElement>(null);
+    const dispatch = useContext(UserDispatchContext);
+    const handleSubmit = useCallback((e: React.FormEvent<HTMLFormElement>)  => {
         e.preventDefault();
         console.log('usernameRef', usernameRef.current?.value);
         console.log('tokenRef', tokenRef.current?.value);
-        if (userData) {
-            userData.user = usernameRef.current?.value || null;
-            userData.token = tokenRef.current?.value || null;
+        if (dispatch) {
+            dispatch({type: 'user', payload: usernameRef.current?.value || null});
+            dispatch({type: 'token', payload: tokenRef.current?.value || null});
+            console.log('dispatched');
         }
-    }
+    }, [dispatch]);
 
     return (
         <>
